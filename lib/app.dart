@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -36,14 +37,14 @@ class App extends StatelessWidget {
               ),
             ),
           ),
-          builder: (context, widget) {
+          builder: EasyLoading.init(builder: (context, widget) {
             return MediaQuery(
               data: MediaQuery.of(context).copyWith(
                 textScaler: const TextScaler.linear(1.0),
               ),
               child: widget!,
             );
-          },
+          }),
         );
       },
     );

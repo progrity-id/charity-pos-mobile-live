@@ -1,3 +1,4 @@
+import 'package:charity_cashier/presentation/dashboard/dashboard_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../presentation/login/login_page.dart';
@@ -15,7 +16,10 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const LoginPage(),
         );
-
+      case RouteConstants.dashboard:
+        return MaterialPageRoute(
+          builder: (_) => const DashboardPage(),
+        );
       default:
         return MaterialPageRoute(
           settings: routeSettings,
