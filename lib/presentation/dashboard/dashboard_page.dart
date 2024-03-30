@@ -1,6 +1,7 @@
 import 'package:charity_cashier/common/constants/app_colors.dart';
 import 'package:charity_cashier/common/constants/route_constant.dart';
 import 'package:charity_cashier/common/extensions/string.dart';
+import 'package:charity_cashier/presentation/dashboard/bloc/cart_home/cart_home_bloc.dart';
 import 'package:charity_cashier/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,8 +15,15 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<DashboardBloc>()..add(DashboardStarted()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => sl<DashboardBloc>()..add(DashboardStarted()),
+        ),
+        BlocProvider(
+          create: (context) => sl<CartHomeBloc>()..add(CartHomeStarted()),
+        ),
+      ],
       child: Scaffold(
         backgroundColor: const Color(0xffF2F4F6),
         appBar: AppBar(
@@ -57,40 +65,7 @@ class DashboardPage extends StatelessWidget {
             horizontal: 16.w,
             vertical: 8.h,
           ),
-          child: InkWell(
-            onTap: () {
-              Navigator.pushNamed(context, RouteConstants.cart);
-            },
-            child: Container(
-              width: 1.sw,
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-              decoration: BoxDecoration(
-                color: const Color(0xff000072),
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: Row(
-                children: [
-                  Text(
-                    "0 Item",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const Spacer(),
-                  Text(
-                    "Rp 0",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          child: const CartHomeWidget(),
         ),
         body: ListView(
           children: [
@@ -152,6 +127,54 @@ class DashboardPage extends StatelessWidget {
   }
 }
 
+class CartHomeWidget extends StatelessWidget {
+  const CartHomeWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CartHomeBloc, CartHomeState>(
+      builder: (context, state) {
+        return InkWell(
+          onTap: state.listCart.isNotEmpty
+              ? () {
+                  Navigator.pushNamed(context, RouteConstants.cart);
+                }
+              : null,
+          child: Container(
+            width: 1.sw,
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+            decoration: BoxDecoration(
+              color: const Color(0xff000072),
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: Row(
+              children: [
+                Text(
+                  "${state.listCart.length} Item",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const Spacer(),
+                Text(
+                  state.totalPrice.toString().toCurrencyFormatted(),
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
 class ProductWidget extends StatelessWidget {
   const ProductWidget({super.key});
 
@@ -189,6 +212,9 @@ class ProductWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10.r),
+                  border: product.isSelected
+                      ? Border.all(color: AppColors.blue, width: 2)
+                      : null,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.025),
@@ -233,18 +259,48 @@ class ProductWidget extends StatelessWidget {
                             ),
                           ),
                           SizedBox(height: 8.h),
-                          SizedBox(
-                            width: 1.sw,
-                            child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10.r),
-                                ),
-                              ),
-                              onPressed: () {},
-                              child: const Text("Add"),
-                            ),
-                          )
+                          !product.isSelected
+                              ? SizedBox(
+                                  width: 1.sw,
+                                  child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.r),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      context
+                                          .read<DashboardBloc>()
+                                          .add(DashboardProductAdded(product));
+                                    },
+                                    child: const Text("Add"),
+                                  ),
+                                )
+                              : Row(
+                                  children: [
+                                    OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                          shape: const CircleBorder()),
+                                      onPressed: () {
+                                        context.read<DashboardBloc>().add(
+                                            DashboardProductDecreased(
+                                                product.id));
+                                      },
+                                      child: const Icon(Icons.remove),
+                                    ),
+                                    Text(product.count.toString()),
+                                    OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                          shape: const CircleBorder()),
+                                      onPressed: () {
+                                        context.read<DashboardBloc>().add(
+                                            DashboardProductAdded(product));
+                                      },
+                                      child: const Icon(Icons.add),
+                                    ),
+                                  ],
+                                )
                         ],
                       ),
                     )

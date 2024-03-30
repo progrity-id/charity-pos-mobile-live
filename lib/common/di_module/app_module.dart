@@ -1,11 +1,13 @@
 import 'package:charity_cashier/data/datasources/category_remote_data_source.dart';
 import 'package:charity_cashier/data/datasources/product_remote_data_source.dart';
 import 'package:charity_cashier/data/repositories/auth_repository_impl.dart';
+import 'package:charity_cashier/data/repositories/cart_repository.dart';
 import 'package:charity_cashier/data/repositories/category_repository.dart';
 import 'package:charity_cashier/data/repositories/product_repository.dart';
 import 'package:charity_cashier/domain/repositories/auth_repository.dart';
 import 'package:charity_cashier/domain/usecases/check_auth_usecase.dart';
 import 'package:charity_cashier/domain/usecases/post_login_usecase.dart';
+import 'package:charity_cashier/presentation/dashboard/bloc/cart_home/cart_home_bloc.dart';
 import 'package:charity_cashier/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:charity_cashier/presentation/login/bloc/login_bloc.dart';
 import 'package:charity_cashier/presentation/splashscreen/bloc/splashscreen_bloc.dart';
@@ -35,6 +37,7 @@ Future configureDependencies() async {
       () => AuthRepositoryImpl(sl(), sl(), sl()));
   sl.registerLazySingleton<CategoryRepository>(() => CategoryRepository(sl()));
   sl.registerLazySingleton<ProductRepository>(() => ProductRepository(sl()));
+  sl.registerLazySingleton<CartRepository>(() => CartRepository());
 
   sl.registerLazySingleton(() => PostLoginUseCase(sl()));
   sl.registerLazySingleton(() => CheckAuthUseCase(sl()));
@@ -42,5 +45,6 @@ Future configureDependencies() async {
   ///Bloc DI
   sl.registerFactory(() => LoginBloc(sl()));
   sl.registerFactory(() => SplashscreenBloc(sl()));
-  sl.registerFactory(() => DashboardBloc(sl(), sl()));
+  sl.registerFactory(() => DashboardBloc(sl(), sl(), sl()));
+  sl.registerFactory(() => CartHomeBloc(sl()));
 }

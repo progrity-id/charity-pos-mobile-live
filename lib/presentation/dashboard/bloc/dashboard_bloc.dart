@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:charity_cashier/data/repositories/cart_repository.dart';
 import 'package:charity_cashier/data/repositories/product_repository.dart';
+import 'package:charity_cashier/domain/entities/cart_entity.dart';
 import 'package:charity_cashier/domain/entities/product_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,10 +16,19 @@ part 'dashboard_state.dart';
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final CategoryRepository _categoryRepository;
   final ProductRepository _productRepository;
+  final CartRepository _cartRepository;
 
-  DashboardBloc(this._categoryRepository, this._productRepository)
-      : super(const DashboardState()) {
+  late final StreamSubscription _subscription;
+
+  DashboardBloc(
+    this._categoryRepository,
+    this._productRepository,
+    this._cartRepository,
+  ) : super(const DashboardState()) {
     on<DashboardStarted>(_onDashboardStarted);
+    on<DashboardProductAdded>(_onDashboardProductAdded);
+    on<DashboardProductUpdated>(_onDashboardProductUpdated);
+    on<DashboardProductDecreased>(_onDashboardProductDecreased);
   }
 
   FutureOr<void> _onDashboardStarted(DashboardStarted event, emit) async {
@@ -45,5 +56,65 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         ),
       ),
     );
+
+    _subscribe();
+  }
+
+  void _subscribe() {
+    _subscription = _cartRepository.items.listen(
+      (cart) {
+        syncProduct(cart);
+      },
+    );
+  }
+
+  void syncProduct(List<CartEntity> cart) {
+    final listProductTemp = [...state.listProduct];
+
+    int counter = 0;
+    for (var product in listProductTemp) {
+      int index = cart.indexWhere((element) => element.id == product.id);
+
+      if (index < 0) {
+        if (product.isSelected) {
+          listProductTemp[counter] = product.copyWith(
+            isSelected: false,
+            count: 0,
+          );
+        }
+      } else {
+        listProductTemp[counter] = product.copyWith(
+          isSelected: true,
+          count: cart[index].count,
+        );
+      }
+
+      counter++;
+    }
+
+    add(DashboardProductUpdated(listProductTemp));
+  }
+
+  FutureOr<void> _onDashboardProductAdded(
+      DashboardProductAdded event, Emitter<DashboardState> emit) {
+    _cartRepository.addItem(
+      CartEntity(
+        id: event.productEntity.id,
+        nama: event.productEntity.nama,
+        gambar: event.productEntity.gambar,
+        count: event.productEntity.count,
+        harga: event.productEntity.harga,
+      ),
+    );
+  }
+
+  FutureOr<void> _onDashboardProductUpdated(
+      DashboardProductUpdated event, Emitter<DashboardState> emit) {
+    emit(state.copyWith(listProduct: event.listProduct));
+  }
+
+  FutureOr<void> _onDashboardProductDecreased(
+      DashboardProductDecreased event, Emitter<DashboardState> emit) {
+    _cartRepository.addDecreasedItem(event.idProduct);
   }
 }
