@@ -34,7 +34,7 @@ class AuthRepositoryImpl extends AuthRepository {
 
   Interceptor _authInterceptor(String token) {
     return QueuedInterceptorsWrapper(onRequest: (reqOptions, handler) {
-      reqOptions.headers['Authorization'] = "bearer $token";
+      reqOptions.headers['Authorization'] = "Bearer $token";
 
       return handler.next(reqOptions);
     }, onError: (error, handler) async {
