@@ -17,7 +17,7 @@ Future configureDependencies() async {
   sl.registerLazySingleton(() => sharedPreferences);
 
   sl.registerLazySingleton(
-      () => createDio(baseUrl: "https://ws-charity-2024.progrity.id/"));
+      () => createDio(baseUrl: "https://ws-charity-2024-live.progrity.id/"));
 
   sl.registerLazySingleton<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImpl(sl()));

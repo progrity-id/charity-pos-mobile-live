@@ -24,6 +24,7 @@ class LoginPage extends StatelessWidget {
           } else if (state.status == LoginStatus.failure) {
             EasyLoading.showError("Email / password anda salah");
           } else if (state.status == LoginStatus.success) {
+            EasyLoading.dismiss();
             Navigator.pushNamedAndRemoveUntil(
                 context, RouteConstants.dashboard, (route) => false);
           }

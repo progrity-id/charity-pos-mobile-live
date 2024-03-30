@@ -1,3 +1,4 @@
+import 'package:charity_cashier/presentation/cart/cart_page.dart';
 import 'package:charity_cashier/presentation/dashboard/dashboard_page.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,10 @@ class AppRouter {
       case RouteConstants.dashboard:
         return MaterialPageRoute(
           builder: (_) => const DashboardPage(),
+        );
+      case RouteConstants.cart:
+        return MaterialPageRoute(
+          builder: (_) => const CartPage(),
         );
       default:
         return MaterialPageRoute(

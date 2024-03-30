@@ -7,4 +7,5 @@ class AppColors {
   static const Color lightGreen = Color(0xFFEBFAED);
   static const Color separator = Color(0xFFEEF0F0);
   static const Color primary = Color(0xff000072);
+  static const Color blue = Color(0xff19AFF9);
 }
