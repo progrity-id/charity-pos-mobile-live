@@ -235,10 +235,10 @@ class ProductWidget extends StatelessWidget {
                         topLeft: Radius.circular(10.r),
                         topRight: Radius.circular(10.r),
                       ),
-                      child: Container(
+                      child: SizedBox(
                         width: 162.w,
                         height: 121.h,
-                        color: Colors.blue,
+                        child: Image.network(product.gambar),
                       ),
                     ),
                     Container(

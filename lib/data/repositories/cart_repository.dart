@@ -36,4 +36,8 @@ class CartRepository {
 
     _controller.sink.add(_listCart);
   }
+
+  Future<List<CartEntity>> getCart() async {
+    return _listCart;
+  }
 }
