@@ -1,3 +1,4 @@
+import 'package:charity_cashier/common/constants/route_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -312,7 +313,9 @@ class CartPage extends StatelessWidget {
           ),
           SizedBox(height: 21.h),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, RouteConstants.payment);
+            },
             child: Text(
               "Process payment",
               style: TextStyle(

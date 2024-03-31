@@ -1,5 +1,7 @@
 import 'package:charity_cashier/presentation/cart/cart_page.dart';
 import 'package:charity_cashier/presentation/dashboard/dashboard_page.dart';
+import 'package:charity_cashier/presentation/payment/payment_page.dart';
+import 'package:charity_cashier/presentation/payment/payment_success_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../presentation/login/login_page.dart';
@@ -24,6 +26,14 @@ class AppRouter {
       case RouteConstants.cart:
         return MaterialPageRoute(
           builder: (_) => const CartPage(),
+        );
+      case RouteConstants.payment:
+        return MaterialPageRoute(
+          builder: (_) => const PaymentPage(),
+        );
+      case RouteConstants.paymentSuccess:
+        return MaterialPageRoute(
+          builder: (_) => const PaymentSuccessPage(),
         );
       default:
         return MaterialPageRoute(

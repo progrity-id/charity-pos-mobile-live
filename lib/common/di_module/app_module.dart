@@ -15,6 +15,7 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/datasources/auth_remote_data_source.dart';
+import '../../domain/usecases/get_user_usecase.dart';
 import '../config/dio_config.dart';
 
 final sl = GetIt.instance;
@@ -41,10 +42,11 @@ Future configureDependencies() async {
 
   sl.registerLazySingleton(() => PostLoginUseCase(sl()));
   sl.registerLazySingleton(() => CheckAuthUseCase(sl()));
+  sl.registerLazySingleton(() => GetUserUseCase(sl()));
 
   ///Bloc DI
   sl.registerFactory(() => LoginBloc(sl()));
   sl.registerFactory(() => SplashscreenBloc(sl()));
-  sl.registerFactory(() => DashboardBloc(sl(), sl(), sl()));
+  sl.registerFactory(() => DashboardBloc(sl(), sl(), sl(), sl()));
   sl.registerFactory(() => CartHomeBloc(sl()));
 }

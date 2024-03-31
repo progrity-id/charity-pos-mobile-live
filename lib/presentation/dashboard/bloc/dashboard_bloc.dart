@@ -4,6 +4,8 @@ import 'package:charity_cashier/data/repositories/cart_repository.dart';
 import 'package:charity_cashier/data/repositories/product_repository.dart';
 import 'package:charity_cashier/domain/entities/cart_entity.dart';
 import 'package:charity_cashier/domain/entities/product_entity.dart';
+import 'package:charity_cashier/domain/entities/user_entity.dart';
+import 'package:charity_cashier/domain/usecases/get_user_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,6 +19,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final CategoryRepository _categoryRepository;
   final ProductRepository _productRepository;
   final CartRepository _cartRepository;
+  final GetUserUseCase _getUserUseCase;
 
   late final StreamSubscription _subscription;
 
@@ -24,6 +27,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     this._categoryRepository,
     this._productRepository,
     this._cartRepository,
+    this._getUserUseCase,
   ) : super(const DashboardState()) {
     on<DashboardStarted>(_onDashboardStarted);
     on<DashboardProductAdded>(_onDashboardProductAdded);
@@ -34,12 +38,15 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   FutureOr<void> _onDashboardStarted(DashboardStarted event, emit) async {
     emit(state.copyWith(status: DashboardStatus.loading));
 
+    final user = await _getUserUseCase();
+
     final res = await _categoryRepository.getCategory();
 
     res.fold(
       (l) => null,
       (r) => emit(
         state.copyWith(
+          user: user,
           listCategory: r,
         ),
       ),

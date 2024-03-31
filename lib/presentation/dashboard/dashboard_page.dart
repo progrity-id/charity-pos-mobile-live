@@ -39,9 +39,13 @@ class DashboardPage extends StatelessWidget {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Alief",
-                style: TextStyle(color: Colors.black),
+              BlocBuilder<DashboardBloc, DashboardState>(
+                builder: (context, state) {
+                  return Text(
+                    state.user?.name ?? "",
+                    style: const TextStyle(color: Colors.black),
+                  );
+                },
               ),
               Text(
                 "Powered by Progrity.id",

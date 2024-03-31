@@ -1,4 +1,3 @@
 class AssetsConstant {
-  // static const String eyeIcon = 'assets/svg_icon/eye.svg';
-  // static const String eyeSlashIcon = 'assets/svg_icon/eye_slash.svg';
+  static const String iconSuccess = 'assets/images/ep_success-filled.png';
 }
