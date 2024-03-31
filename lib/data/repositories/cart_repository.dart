@@ -40,4 +40,8 @@ class CartRepository {
   Future<List<CartEntity>> getCart() async {
     return _listCart;
   }
+
+  void resetCart() async {
+    _listCart.clear();
+  }
 }

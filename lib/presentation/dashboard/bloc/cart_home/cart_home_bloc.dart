@@ -19,6 +19,13 @@ class CartHomeBloc extends Bloc<CartHomeEvent, CartHomeState> {
     on<CartHomeUpdated>(_onCartHomeUpdated);
   }
 
+  @override
+  Future<void> close() {
+    _subscription.cancel();
+
+    return super.close();
+  }
+
   FutureOr<void> _onCartHomeStarted(CartHomeStarted event, emit) {
     _subscription = _cartRepository.items.listen((cart) {
       int total = 0;

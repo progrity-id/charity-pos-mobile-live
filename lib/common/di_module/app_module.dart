@@ -13,6 +13,7 @@ import 'package:charity_cashier/presentation/cart/bloc/cart_bloc.dart';
 import 'package:charity_cashier/presentation/dashboard/bloc/cart_home/cart_home_bloc.dart';
 import 'package:charity_cashier/presentation/dashboard/bloc/dashboard_bloc.dart';
 import 'package:charity_cashier/presentation/login/bloc/login_bloc.dart';
+import 'package:charity_cashier/presentation/payment/bloc/payment_bloc.dart';
 import 'package:charity_cashier/presentation/splashscreen/bloc/splashscreen_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,4 +58,5 @@ Future configureDependencies() async {
   sl.registerFactory(() => DashboardBloc(sl(), sl(), sl(), sl()));
   sl.registerFactory(() => CartHomeBloc(sl()));
   sl.registerFactory(() => CartBloc(sl(), sl()));
+  sl.registerFactory(() => PaymentBloc(sl(), sl(), sl()));
 }

@@ -35,6 +35,13 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     on<DashboardProductDecreased>(_onDashboardProductDecreased);
   }
 
+  @override
+  Future<void> close() {
+    _subscription.cancel();
+
+    return super.close();
+  }
+
   FutureOr<void> _onDashboardStarted(DashboardStarted event, emit) async {
     emit(state.copyWith(status: DashboardStatus.loading));
 

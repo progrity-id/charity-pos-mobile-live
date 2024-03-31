@@ -32,8 +32,12 @@ class AppRouter {
           builder: (_) => const PaymentPage(),
         );
       case RouteConstants.paymentSuccess:
+        final args = routeSettings.arguments as PaymentSuccessArg;
+
         return MaterialPageRoute(
-          builder: (_) => const PaymentSuccessPage(),
+          builder: (_) => PaymentSuccessPage(
+            arg: args,
+          ),
         );
       default:
         return MaterialPageRoute(

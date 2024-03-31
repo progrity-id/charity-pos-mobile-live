@@ -1,11 +1,24 @@
+import 'package:charity_cashier/common/extensions/string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../common/constants/assets_constant.dart';
 import '../../common/constants/route_constant.dart';
 
+class PaymentSuccessArg {
+  final int totalOrder;
+  final int totalPayment;
+
+  PaymentSuccessArg(this.totalOrder, this.totalPayment);
+}
+
 class PaymentSuccessPage extends StatelessWidget {
-  const PaymentSuccessPage({super.key});
+  const PaymentSuccessPage({
+    super.key,
+    required this.arg,
+  });
+
+  final PaymentSuccessArg arg;
 
   @override
   Widget build(BuildContext context) {
@@ -75,11 +88,11 @@ class PaymentSuccessPage extends StatelessWidget {
                     bottom: BorderSide(color: Color(0xffCECECE)),
                   ),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Total"),
-                    Text("Rp125.000"),
+                    const Text("Total"),
+                    Text(arg.totalOrder.toString().toCurrencyFormatted()),
                   ],
                 ),
               ),
@@ -91,11 +104,11 @@ class PaymentSuccessPage extends StatelessWidget {
                     bottom: BorderSide(color: Color(0xffCECECE)),
                   ),
                 ),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Cash"),
-                    Text("Rp125.000"),
+                    const Text("Cash"),
+                    Text(arg.totalPayment.toString().toCurrencyFormatted()),
                   ],
                 ),
               ),
@@ -111,7 +124,9 @@ class PaymentSuccessPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Rp 0",
+                    (arg.totalPayment - arg.totalOrder)
+                        .toString()
+                        .toCurrencyFormatted(),
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
