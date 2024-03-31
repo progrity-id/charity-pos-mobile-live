@@ -28,7 +28,32 @@ class CartPage extends StatelessWidget {
       body: ListView(
         padding: EdgeInsets.all(16.r),
         children: [
-          Text("Current Order"),
+          const Text(
+            "Customer Information",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Container(
+            padding: EdgeInsets.all(12.r),
+            decoration: BoxDecoration(
+                color: const Color(0xffE6E6E6),
+                borderRadius: BorderRadius.circular(10.r)),
+            child: Text(
+              "INV-12312-123",
+              style: const TextStyle(color: Color(0xffA4A4A4)),
+            ),
+          ),
+          SizedBox(height: 8.h),
+          const Text(
+            "Current Order",
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           SizedBox(height: 8.h),
           Container(
             padding: EdgeInsets.all(10.r),
@@ -319,7 +344,7 @@ class CartPage extends StatelessWidget {
             child: Text(
               "Process payment",
               style: TextStyle(
-                fontSize: 18.sp,
+                fontSize: 14.sp,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
@@ -332,7 +357,7 @@ class CartPage extends StatelessWidget {
             child: Text(
               "Cancel",
               style: TextStyle(
-                fontSize: 18.sp,
+                fontSize: 14.sp,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
